@@ -5,6 +5,7 @@
 #include<stdlib.h>
 #include<unistd.h>
 #include <pthread.h>
+#include <sys/time.h>
 #include"libft/libft.h"
 
 typedef struct s_data{
@@ -18,6 +19,8 @@ typedef struct s_philo{
 	pthread_mutex_t* 	mutex;
 	t_data				data;
 	int					id;
+	int*				stop_flag;
+	struct timeval		*last_update;
 } t_philo;
 
 

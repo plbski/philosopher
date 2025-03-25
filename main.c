@@ -1,17 +1,48 @@
 #include "philo.h"
 
+void	*monintoring(void *arg)
+{
+	t_philo 		*args;
+	struct timeval	now;
+	long			elapse;
+
+	args = (t_philo *)arg;
+	while(1)
+	{
+		gettimeofday(&now, NULL);
+		elapse = (now.tv_sec - args->last_update->tv_sec) * 1000 +
+				(now.tv_usec - args->last_update->tv_usec) / 1000;
+		if (elapse > args->data.time_to_die)
+			
+	}
+}
 void	*test(void *arg)
 {
-	t_philo *args = (t_philo *)arg;
-	while (*(args->share_count) < 20)
+	t_philo *args;
+
+	args =(t_philo *)arg;
+	while (1)
 	{
 		pthread_mutex_lock(args->mutex);
 		*(args->share_count) += 1;
+		gettimeofday(args->last_update, NULL);
 		printf("thread %d compteur :%d\n",args->id, *(args->share_count));
 		pthread_mutex_unlock(args->mutex);
 		usleep(10);
 	}
 	pthread_exit(NULL);
+}
+
+void	stop_thread(pthread_t* philo, int nb_philo)
+{
+	int	i;
+
+	i = 0;
+	while (i < nb_philo)
+	{
+		pthread_cancel(philo[i]);
+		i ++;
+	}
 }
 void create_philo(pthread_t *philo, t_philo *args, int num_philo, pthread_mutex_t *mutex) {
     int i = 0;
@@ -27,6 +58,8 @@ void create_philo(pthread_t *philo, t_philo *args, int num_philo, pthread_mutex_
 		}
 		i++;
 	}
+	usleep(10000);
+	stop_thread(philo, num_philo);
 
 	i = 0;
 	while (i < num_philo) {
