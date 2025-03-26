@@ -12,6 +12,7 @@ typedef struct s_data{
 	int time_to_die;
 	int time_to_sleep;
 	int time_to_eat;
+	int nb_philo;
 } t_data;
 
 typedef struct s_philo{
@@ -21,6 +22,7 @@ typedef struct s_philo{
 	int					id;
 	int*				stop_flag;
 	struct timeval		*last_update;
+	int*					*r_fork;
 } t_philo;
 
 

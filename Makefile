@@ -5,7 +5,7 @@ SOURCES = main.c
 LIBFT_PASS = libft/
 LIBFT = $(LIBFT_PASS)libft.a
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g
 CC = cc
 
 
