@@ -1,4 +1,4 @@
-NAME = philosopher
+NAME = philosopher, utils.c
 
 SOURCES = main.c
 
