@@ -3,20 +3,21 @@
 void	*monitor(void *arg)
 {
 	t_philo 		*args;
-	long			elapse;
+	unsigned int			elapse;
 	int				i;
 	int				*dead_philo;
-	int				t;
+	unsigned int				t;
 
 	args = (t_philo *)arg;
 	dead_philo = malloc(sizeof(int));
 	while(1)
 	{
-		usleep(5000);
+		usleep(500);
 		i = 0;
 		t = get_time();
 		while (i < args->data.nb_philo)
 		{
+			t = get_time();
 			elapse = t - args[i].last_update;
 			if ((elapse >= args->data.time_to_die) && (args[i].eaten != 1))
 			{
@@ -46,9 +47,11 @@ void	*test(void *arg)
 		printf("philo %d eat\n",args->id);
 		usleep(args->data.time_to_eat);
 		args->last_update = get_time();
-		args->eaten = 0;
 		pthread_mutex_unlock(args->r_fork);
 		pthread_mutex_unlock(args->l_fork);
+		args->eaten = 0;
+		args->share_count ++;
+		printf("philo %d think\n", args->id);
 		printf("philo %d dodo\n", args->id);
 		usleep(args->data.time_to_sleep);
 	}
@@ -96,10 +99,11 @@ void init_philo(t_philo *args, char **v, pthread_mutex_t *fork, int nb_philo)
 	{
 		args[i].id = i + 1;
 		args[i].share_count = 0;
-		args[i].data.time_to_die = atoi(v[2]);
-		args[i].data.time_to_eat = atoi(v[3]) * 1000;
-		args[i].data.time_to_sleep = atoi(v[4]) * 1000;
+		args[i].data.time_to_die = ft_atoi(v[2]);
+		args[i].data.time_to_eat = ft_atoi(v[3]) * 1000;
+		args[i].data.time_to_sleep = ft_atoi(v[4]) * 1000;
 		args[i].eaten = 0;
+		args[i].share_count = 0;
 		args[i].last_update = get_time();
 		args[i].data.nb_philo = nb_philo;
 		args[i].r_fork = &fork[i];
@@ -111,12 +115,13 @@ void init_philo(t_philo *args, char **v, pthread_mutex_t *fork, int nb_philo)
 
 int main(int c, char **v) 
 {
-	int num_philo;
+	int 			num_philo;
 	pthread_mutex_t *fork;
-	pthread_t *philo;
-	t_philo *args;
+	pthread_t 		*philo;
+	t_philo 		*args;
+	int				i;
 
-	if (c != 5)
+	if (c < 5 || c > 6)
 		return 1;
 	num_philo = atoi(v[1]);
 	if (num_philo <= 0) {
@@ -130,9 +135,14 @@ int main(int c, char **v)
 	    perror("Erreur d'allocation de mémoire");
 	    return 1;
 	}
-
 	init_philo(args, v, fork, num_philo);
 	create_philo(philo, args);
+	i = 0;
+	while (i < num_philo)
+	{
+		pthread_mutex_destroy(&fork[i]);
+		i ++;
+	}
 	free(philo);
 	free(args);
 	return 0;
