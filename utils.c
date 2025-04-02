@@ -2,8 +2,8 @@
 
 int ft_atoi(char *s)
 {
-	int		i;
-	int 	nb;
+	int				i;
+	unsigned int	nb;
 
 	i = 0;
 	nb = 0;
@@ -39,3 +39,37 @@ pthread_mutex_t *fork_init(int nb_philo)
 	}
 	return(fork);
 }
+
+void manage_fork(void *arg, int manage)
+{
+	t_philo *args;
+
+	args =(t_philo *)arg;
+		if (args->id % 2 == 0)
+		{
+			if (manage == 0)
+			{
+				pthread_mutex_lock(args->r_fork); 
+				pthread_mutex_lock(args->l_fork);
+			}
+			else
+			{
+				pthread_mutex_unlock(args->r_fork); 
+				pthread_mutex_unlock(args->l_fork);
+			}
+		}
+		else
+		{
+			if (manage == 0)
+			{
+				pthread_mutex_lock(args->l_fork); 
+				pthread_mutex_lock(args->r_fork);
+			}
+			else
+			{
+				pthread_mutex_unlock(args->l_fork); 
+				pthread_mutex_unlock(args->r_fork);
+			} 
+		}
+}
+

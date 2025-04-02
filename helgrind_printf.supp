@@ -1,0 +1,19 @@
+{
+   printf-race
+   Helgrind:Race
+   fun:mempcpy
+   fun:_IO_new_file_xsputn
+   fun:_IO_file_xsputn@@GLIBC_2.2.5
+   fun:outstring_func
+   fun:__vfprintf_internal
+   fun:printf
+}
+
+{
+   puts-race
+   Helgrind:Race
+   fun:mempcpy
+   fun:_IO_new_file_xsputn
+   fun:_IO_file_xsputn@@GLIBC_2.2.5
+   fun:puts
+}
