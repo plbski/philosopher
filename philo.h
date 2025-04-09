@@ -16,7 +16,7 @@ typedef struct s_data{
 } t_data;
 
 typedef struct s_philo{
-	int				share_count;
+	int					share_count;
 	int					eaten;
 	int					id;
 	int*				stop_flag;
@@ -24,7 +24,8 @@ typedef struct s_philo{
 	pthread_mutex_t*	r_fork;
 	pthread_mutex_t*	l_fork;
 	pthread_mutex_t		data_mutex;
-	pthread_mutex_t		*stop_mutex;
+	pthread_mutex_t*	stop_mutex;
+	pthread_mutex_t		print_mutex;
 	t_data				data;
 } t_philo;
 
@@ -32,4 +33,5 @@ long			get_time();
 pthread_mutex_t	*fork_init(int nb_philo);
 int 			ft_atoi(char *s);
 void			manage_fork(void *arg, int manage);
+void			get_time_philo(void *arg);
 #endif

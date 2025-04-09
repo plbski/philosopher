@@ -3,7 +3,6 @@
 void	*monitor(void *arg)
 {
 	t_philo 					*args;
-	unsigned int				elapse;
 	int							i;
 	unsigned int				t;
 
@@ -12,25 +11,21 @@ void	*monitor(void *arg)
 	{
 		usleep(500);
 		i = 0;
-		t = get_time();
 		while (i < args->data.nb_philo)
 		{
 			t = get_time();
 			pthread_mutex_lock(&args[i].data_mutex);
-			elapse = t - args[i].last_update;
-			if ((elapse >= args->data.time_to_die) && (args[i].eaten != 1))
+			if (((t - args[i].last_update) >= args->data.time_to_die) && (args[i].eaten != 1))
 			{
-
 				pthread_mutex_lock(args[i].stop_mutex);
 				*(args->stop_flag) = 1;
-				pthread_mutex_unlock(&args[i].data_mutex);
 				pthread_mutex_unlock(args[i].stop_mutex);
+				pthread_mutex_unlock(&args[i].data_mutex);
 				pthread_exit((void *)&args[i].id);
 			}
 			pthread_mutex_unlock(&args[i].data_mutex);
 			i ++;
 		}
-		elapse = 0;
 	}
 }
 
@@ -52,21 +47,25 @@ void	*test(void *arg)
 		args->eaten = 1;
 		pthread_mutex_lock(args->stop_mutex);
 		stop = *(args->stop_flag);
-		if (stop!= 1)
-			printf("philo %d eat\n",args->id);
 		pthread_mutex_unlock(args->stop_mutex);
+		if (stop!= 1)
+			printf("%ld %d eaten\n",get_time(), args->id);
 		pthread_mutex_unlock(&args->data_mutex);
 		usleep(args->data.time_to_eat);
 		pthread_mutex_lock(&args->data_mutex);
 		args->last_update = get_time();
+		pthread_mutex_unlock(&args->data_mutex);
 		args->eaten = 0;
 		args->share_count ++;
 		pthread_mutex_unlock(&args->data_mutex);
 		manage_fork(arg, 1);
-		if(*(args->stop_flag) != 1)
+		pthread_mutex_lock(args->stop_mutex);
+		stop = *(args->stop_flag);
+		pthread_mutex_unlock(args->stop_mutex);
+		if(stop != 1)
 		{
-			printf("philo %d think\n", args->id);
-			printf("philo %d dodo\n", args->id);
+			printf("%ld %d thinking\n",get_time(), args->id);
+			printf("%ld %d dodo\n",get_time(), args->id);
 			usleep(args->data.time_to_sleep);
 		}
 		else
