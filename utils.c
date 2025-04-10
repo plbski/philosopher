@@ -40,36 +40,45 @@ pthread_mutex_t *fork_init(int nb_philo)
 	return(fork);
 }
 
-void manage_fork(void *arg, int manage)
+void	print_mute(void *arg, int note, int died)
 {
-	t_philo *args;
+	t_philo	*args;
+	long	time;
+	int		stop;
+
 
 	args =(t_philo *)arg;
-		if (args->id % 2 == 0)
-		{
-			if (manage == 0)
-			{
-				pthread_mutex_lock(args->r_fork); 
-				pthread_mutex_lock(args->l_fork);
-			}
-			else
-			{
-				pthread_mutex_unlock(args->r_fork); 
-				pthread_mutex_unlock(args->l_fork);
-			}
-		}
+	time = get_time();
+	pthread_mutex_lock(&args->data->stop_mutex);
+	stop = args->data->stop_flag;
+	pthread_mutex_unlock(&args->data->stop_mutex);
+	if (stop != 1)
+	{
+		pthread_mutex_lock(&args->data->print_mutex);
+		if (note == 0)
+				printf("%ld, %d has taken a fork\n", time, args->id);
+		else if(note == 1)
+			printf("%ld %d is eating\n", time, args->id);
+		else if(note == 2)
+			printf("%ld %d is thinking\n", time, args->id);
+		else if(note == 3)
+			printf("%ld %d is sleeping\n", time, args->id);
 		else
-		{
-			if (manage == 0)
-			{
-				pthread_mutex_lock(args->l_fork); 
-				pthread_mutex_lock(args->r_fork);
-			}
-			else
-			{
-				pthread_mutex_unlock(args->l_fork); 
-				pthread_mutex_unlock(args->r_fork);
-			} 
-		}
+			printf("%ld %d is died\n", time, died);
+		pthread_mutex_unlock(&args->data->print_mutex);
+	}
 }
 
+int	init_data(t_data *data, char **v)
+{
+	data->nb_philo = ft_atoi(v[1]);
+	data->time_to_die = ft_atoi(v[2]);
+	data->time_to_eat = ft_atoi(v[3]) * 1000;
+	data->time_to_sleep = ft_atoi(v[4]) * 1000;
+	data->stop_flag = 0;
+	pthread_mutex_init(&data->stop_mutex, NULL);
+	pthread_mutex_init(&data->print_mutex, NULL);
+	if (data->time_to_die <= 0 || data->time_to_eat <= 0 || data->time_to_sleep <=0 || data->nb_philo <= 0)
+		return(1);
+	return(0);
+}
