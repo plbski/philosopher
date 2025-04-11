@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/11 13:48:01 by pbuet             #+#    #+#             */
+/*   Updated: 2025/04/11 14:07:02 by pbuet            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include"philo.h"
 
-int ft_atoi(char *s)
+int	ft_atoi(char *s)
 {
 	int				i;
 	unsigned int	nb;
@@ -12,20 +24,23 @@ int ft_atoi(char *s)
 		if (s[i] >= 48 && s[i] <= 57)
 			nb = (nb * 10) + (s[i] - '0');
 		else
-			return(-1);
+			return (-1);
+		if (i >= 11)
+			return (-1);
 		i ++;
 	}
-	return(nb);
+	return (nb);
 }
-long	get_time()
+
+long	get_time(void)
 {
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return(tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-pthread_mutex_t *fork_init(int nb_philo)
+pthread_mutex_t	*fork_init(int nb_philo)
 {
 	int				i;
 	pthread_mutex_t	*fork;
@@ -37,17 +52,16 @@ pthread_mutex_t *fork_init(int nb_philo)
 		pthread_mutex_init(&fork[i], NULL);
 		i ++;
 	}
-	return(fork);
+	return (fork);
 }
 
-void	print_mute(void *arg, int note, int died)
+void	print_mute(void *arg, int note)
 {
 	t_philo	*args;
 	long	time;
 	int		stop;
 
-
-	args =(t_philo *)arg;
+	args = (t_philo *)arg;
 	time = get_time();
 	pthread_mutex_lock(&args->data->stop_mutex);
 	stop = args->data->stop_flag;
@@ -56,29 +70,34 @@ void	print_mute(void *arg, int note, int died)
 	{
 		pthread_mutex_lock(&args->data->print_mutex);
 		if (note == 0)
-				printf("%ld, %d has taken a fork\n", time, args->id);
-		else if(note == 1)
+			printf("%ld %d has taken a fork\n", time, args->id);
+		else if (note == 1)
 			printf("%ld %d is eating\n", time, args->id);
-		else if(note == 2)
-			printf("%ld %d is thinking\n", time, args->id);
-		else if(note == 3)
-			printf("%ld %d is sleeping\n", time, args->id);
 		else
-			printf("%ld %d is died\n", time, died);
+		{
+			printf("%ld %d is thinking\n", time, args->id);
+			printf("%ld %d is sleeping\n", time, args->id);
+		}
 		pthread_mutex_unlock(&args->data->print_mutex);
 	}
 }
 
-int	init_data(t_data *data, char **v)
+int	init_data(t_data *data, char **v, int c)
 {
 	data->nb_philo = ft_atoi(v[1]);
 	data->time_to_die = ft_atoi(v[2]);
 	data->time_to_eat = ft_atoi(v[3]) * 1000;
 	data->time_to_sleep = ft_atoi(v[4]) * 1000;
 	data->stop_flag = 0;
+	if (c == 6)
+		data->nb_eat = ft_atoi(v[5]);
+	else
+		data->nb_eat = 0;
 	pthread_mutex_init(&data->stop_mutex, NULL);
 	pthread_mutex_init(&data->print_mutex, NULL);
-	if (data->time_to_die <= 0 || data->time_to_eat <= 0 || data->time_to_sleep <=0 || data->nb_philo <= 0)
-		return(1);
-	return(0);
+	if (data->time_to_die <= 0 || data->time_to_eat <= 0
+		|| data->time_to_sleep <= 0 || data->nb_philo <= 0
+		|| data->nb_eat <= -1)
+		return (1);
+	return (0);
 }

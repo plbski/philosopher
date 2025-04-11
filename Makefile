@@ -1,6 +1,6 @@
 NAME = philosopher
 
-SOURCES = main.c utils.c philo_eat.c
+SOURCES = main.c utils.c philo_eat.c monitor.c
 
 FLAGS = -Wall -Wextra -Werror -g
 CC = cc
