@@ -6,7 +6,7 @@
 /*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:43:40 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/16 16:27:38 by pbuet            ###   ########.fr       */
+/*   Updated: 2025/04/16 16:41:42 by pbuet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,10 @@ void	*monitor(void *arg)
 		finish = 0;
 		while (i < args->data->nb_philo - 1)
 		{
+			pthread_mutex_lock(&args[i].data_mutex);
 			if (args[i].finish == 1)
 				finish ++;
+			pthread_mutex_unlock(&args[i].data_mutex);
 			if (check_time(args, i))
 				pthread_exit((void *)&args[i].id);
 			i ++;
