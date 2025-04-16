@@ -6,7 +6,7 @@
 /*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:48:01 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/11 14:07:02 by pbuet            ###   ########.fr       */
+/*   Updated: 2025/04/16 15:01:26 by pbuet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ pthread_mutex_t	*fork_init(int nb_philo)
 	return (fork);
 }
 
-void	print_mute(void *arg, int note)
+void	print_mute(void *arg, char *s, int force)
 {
 	t_philo	*args;
 	long	time;
@@ -66,18 +66,10 @@ void	print_mute(void *arg, int note)
 	pthread_mutex_lock(&args->data->stop_mutex);
 	stop = args->data->stop_flag;
 	pthread_mutex_unlock(&args->data->stop_mutex);
-	if (stop != 1)
+	if (stop != 1 || force == 1)
 	{
 		pthread_mutex_lock(&args->data->print_mutex);
-		if (note == 0)
-			printf("%ld %d has taken a fork\n", time, args->id);
-		else if (note == 1)
-			printf("%ld %d is eating\n", time, args->id);
-		else
-		{
-			printf("%ld %d is thinking\n", time, args->id);
-			printf("%ld %d is sleeping\n", time, args->id);
-		}
+		printf("%ld %d %s\n", time, args->id, s);
 		pthread_mutex_unlock(&args->data->print_mutex);
 	}
 }

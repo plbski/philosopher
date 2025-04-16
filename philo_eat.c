@@ -6,7 +6,7 @@
 /*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 11:42:08 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/11 14:03:03 by pbuet            ###   ########.fr       */
+/*   Updated: 2025/04/16 16:30:13 by pbuet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@ void	unlock_fork(void *arg)
 	t_philo	*args;
 
 	args = (t_philo *)arg;
-	if (args->l_fork < args->r_fork)
+	if (args->id % 2 == 0)
 	{
-		pthread_mutex_unlock(args->r_fork);
 		pthread_mutex_unlock(args->l_fork);
+		pthread_mutex_unlock(args->r_fork);
 	}
 	else
 	{
-		pthread_mutex_unlock(args->l_fork);
 		pthread_mutex_unlock(args->r_fork);
+		pthread_mutex_unlock(args->l_fork);
 	}
 }
 
@@ -34,17 +34,19 @@ void	lock_fork(void *arg)
 	t_philo	*args;
 
 	args = (t_philo *)arg;
-	if (args->l_fork < args->r_fork)
+	if (args->id % 2 == 0)
 	{
-		pthread_mutex_lock(args->l_fork);
 		pthread_mutex_lock(args->r_fork);
+		print_mute(args, "has taken a fork", 0);
+		pthread_mutex_lock(args->l_fork);
 	}
 	else
 	{
-		pthread_mutex_lock(args->r_fork);
 		pthread_mutex_lock(args->l_fork);
+		print_mute(args, "has taken a fork", 0);
+		pthread_mutex_lock(args->r_fork);
 	}
-	print_mute(args, 0);
+	print_mute(args, "has taken a fork", 0);
 }
 
 void	eat(void *arg)
@@ -56,7 +58,7 @@ void	eat(void *arg)
 	pthread_mutex_lock(&args->data_mutex);
 	args->last_update = get_time();
 	args->eaten = 1;
-	print_mute(args, 1);
+	print_mute(args, "is eating", 0);
 	pthread_mutex_unlock(&args->data_mutex);
 	usleep(args->data->time_to_eat);
 	pthread_mutex_lock(&args->data_mutex);
@@ -70,4 +72,5 @@ void	eat(void *arg)
 		pthread_exit(NULL);
 	}
 	pthread_mutex_unlock(&args->data_mutex);
+	print_mute(args, "is thinking", 0);
 }

@@ -6,7 +6,7 @@
 /*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:43:40 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/11 13:45:23 by pbuet            ###   ########.fr       */
+/*   Updated: 2025/04/16 16:27:38 by pbuet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	*monitor(void *arg)
 	int						i;
 	int						finish;
 
-	args = (t_philo *)arg;
+	args = (t_philo *)arg; 
 	while (1)
 	{
 		usleep(500);

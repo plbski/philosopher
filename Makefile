@@ -1,4 +1,4 @@
-NAME = philosopher
+NAME = philo
 
 SOURCES = main.c utils.c philo_eat.c monitor.c
 

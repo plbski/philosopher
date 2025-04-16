@@ -6,7 +6,7 @@
 /*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:36:30 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/11 14:05:08 by pbuet            ###   ########.fr       */
+/*   Updated: 2025/04/16 16:33:16 by pbuet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,27 @@ void	*test(void *arg)
 	int		stop;
 
 	args = (t_philo *)arg;
-	if ((args->id % 2) == 0)
+	if ((args->id % 2) != 0)
 		usleep(100);
 	pthread_mutex_lock(&args->data_mutex);
-	args->last_update = get_time();
+	if (args->data->nb_philo == 1)
+	{
+		args->finish = 1;
+		pthread_mutex_unlock(&args->data_mutex);
+		pthread_exit(NULL);
+	}
 	pthread_mutex_unlock(&args->data_mutex);
 	while (1)
 	{
+		if ((args->id % 2) != 0)
+			usleep(200);
 		eat(args);
 		pthread_mutex_lock(&args->data->stop_mutex);
 		stop = args->data->stop_flag;
 		pthread_mutex_unlock(&args->data->stop_mutex);
 		if (stop == 1)
 			pthread_exit(NULL);
-		print_mute(args, 2);
+		print_mute(args, "is sleeping", 0);
 		usleep(args->data->time_to_sleep);
 	}
 	pthread_exit(NULL);
@@ -55,7 +62,7 @@ void	create_philo(pthread_t *philo, t_philo *args)
 	pthread_join(monitoring, (void **)&dead);
 	i = 0;
 	if (dead != NULL)
-		printf("%ld %d died\n", get_time(), *dead);
+		print_mute(&args[*dead -1], "died", 1);
 	while (i < args->data->nb_philo)
 	{
 		pthread_join(philo[i], NULL);

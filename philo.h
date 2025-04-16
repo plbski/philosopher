@@ -6,7 +6,7 @@
 /*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:52:04 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/11 13:54:21 by pbuet            ###   ########.fr       */
+/*   Updated: 2025/04/16 15:01:11 by pbuet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void			*monitor(void *arg);
 long			get_time(void);
 pthread_mutex_t	*fork_init(int nb_philo);
 int				ft_atoi(char *s);
-void			print_mute(void *arg, int note);
+void			print_mute(void *arg, char *s, int force);
 void			freedest(t_data data, pthread_mutex_t *fork,
 					pthread_t *philo, t_philo *args);
 
