@@ -6,28 +6,21 @@
 /*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:36:30 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/16 16:33:16 by pbuet            ###   ########.fr       */
+/*   Updated: 2025/04/16 16:53:04 by pbuet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"philo.h"
 
-void	*test(void *arg)
+void	*routine(void *arg)
 {
 	t_philo	*args;
 	int		stop;
 
 	args = (t_philo *)arg;
+	test(args);
 	if ((args->id % 2) != 0)
 		usleep(100);
-	pthread_mutex_lock(&args->data_mutex);
-	if (args->data->nb_philo == 1)
-	{
-		args->finish = 1;
-		pthread_mutex_unlock(&args->data_mutex);
-		pthread_exit(NULL);
-	}
-	pthread_mutex_unlock(&args->data_mutex);
 	while (1)
 	{
 		if ((args->id % 2) != 0)
@@ -53,7 +46,7 @@ void	create_philo(pthread_t *philo, t_philo *args)
 	i = 0;
 	while (i < args->data->nb_philo)
 	{
-		if (pthread_create(&philo[i], NULL, test, &args[i]) != 0)
+		if (pthread_create(&philo[i], NULL, routine, &args[i]) != 0)
 			exit(EXIT_FAILURE);
 		i++;
 	}

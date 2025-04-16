@@ -6,7 +6,7 @@
 /*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:52:04 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/16 15:01:11 by pbuet            ###   ########.fr       */
+/*   Updated: 2025/04/16 16:53:13 by pbuet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@ void			freedest(t_data data, pthread_mutex_t *fork,
 
 //philo_eat
 void			eat(void *arg);
+void			test(void *arg);
 
 #endif

@@ -6,11 +6,27 @@
 /*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 11:42:08 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/16 16:30:13 by pbuet            ###   ########.fr       */
+/*   Updated: 2025/04/16 16:56:35 by pbuet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"philo.h"
+
+void	test(void *arg)
+{
+	t_philo	*args;
+
+	args = (t_philo *)arg;
+	pthread_mutex_lock(&args->data_mutex);
+	if (args->data->nb_philo == 1)
+	{
+		args->finish = 1;
+		pthread_mutex_unlock(&args->data_mutex);
+		print_mute(args, "died", 0);
+		pthread_exit(NULL);
+	}
+	pthread_mutex_unlock(&args->data_mutex);
+}
 
 void	unlock_fork(void *arg)
 {
