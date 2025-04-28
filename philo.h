@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
+/*   By: plbuet <plbuet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:52:04 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/16 16:53:13 by pbuet            ###   ########.fr       */
+/*   Updated: 2025/04/28 08:50:26 by plbuet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_data{
 	int				nb_philo;
 	int				nb_eat;
 	int				stop_flag;
+	long			start;
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	stop_mutex;
 }	t_data;
@@ -54,7 +55,8 @@ void			freedest(t_data data, pthread_mutex_t *fork,
 					pthread_t *philo, t_philo *args);
 
 //philo_eat
-void			eat(void *arg);
-void			test(void *arg);
+int			eat(void *arg);
+int			test(void *arg);
+void		*routine(void *arg);
 
 #endif

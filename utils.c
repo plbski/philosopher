@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
+/*   By: plbuet <plbuet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:48:01 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/16 15:01:26 by pbuet            ###   ########.fr       */
+/*   Updated: 2025/04/28 11:05:13 by plbuet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,18 @@ pthread_mutex_t	*fork_init(int nb_philo)
 	fork = malloc(sizeof(pthread_mutex_t) * nb_philo);
 	while (i < nb_philo)
 	{
-		pthread_mutex_init(&fork[i], NULL);
+		if (pthread_mutex_init(&fork[i], NULL))
+			break;
 		i ++;
+	}
+	if (i < nb_philo)
+	{
+		while (i <= 0)
+		{
+			pthread_mutex_destroy(&fork[i]);
+			i --;
+		}
+		return(NULL);
 	}
 	return (fork);
 }
@@ -58,18 +68,16 @@ pthread_mutex_t	*fork_init(int nb_philo)
 void	print_mute(void *arg, char *s, int force)
 {
 	t_philo	*args;
-	long	time;
 	int		stop;
 
 	args = (t_philo *)arg;
-	time = get_time();
 	pthread_mutex_lock(&args->data->stop_mutex);
 	stop = args->data->stop_flag;
 	pthread_mutex_unlock(&args->data->stop_mutex);
 	if (stop != 1 || force == 1)
 	{
 		pthread_mutex_lock(&args->data->print_mutex);
-		printf("%ld %d %s\n", time, args->id, s);
+		printf("%ld %d %s\n", get_time() -  args->data->start, args->id, s);
 		pthread_mutex_unlock(&args->data->print_mutex);
 	}
 }
@@ -81,15 +89,24 @@ int	init_data(t_data *data, char **v, int c)
 	data->time_to_eat = ft_atoi(v[3]) * 1000;
 	data->time_to_sleep = ft_atoi(v[4]) * 1000;
 	data->stop_flag = 0;
+	data->start = get_time();
 	if (c == 6)
 		data->nb_eat = ft_atoi(v[5]);
 	else
 		data->nb_eat = 0;
-	pthread_mutex_init(&data->stop_mutex, NULL);
-	pthread_mutex_init(&data->print_mutex, NULL);
+	if ((pthread_mutex_init(&data->stop_mutex, NULL) != 0))
+	{
+		pthread_mutex_destroy(&data->stop_mutex);
+		return(1);
+	}
+	if ((pthread_mutex_init(&data->print_mutex, NULL) != 0))
+	{
+		pthread_mutex_destroy(&data->print_mutex);
+		return(1);
+	}
 	if (data->time_to_die <= 0 || data->time_to_eat <= 0
 		|| data->time_to_sleep <= 0 || data->nb_philo <= 0
-		|| data->nb_eat <= -1)
+		|| data->nb_eat <= 0)
 		return (1);
 	return (0);
 }

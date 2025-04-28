@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
+/*   By: plbuet <plbuet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:43:40 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/16 16:44:47 by pbuet            ###   ########.fr       */
+/*   Updated: 2025/04/23 12:55:56 by plbuet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ void	*monitor(void *arg)
 				finish ++;
 			pthread_mutex_unlock(&args[i].data_mutex);
 			if (check_time(args, i))
-				pthread_exit((void *)&args[i].id);
+				return ((void *)&args[i].id);
 			i ++;
 		}
 		if (finish == i)
-			pthread_exit(NULL);
+			return (NULL);
 	}
 }
