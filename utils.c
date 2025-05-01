@@ -6,7 +6,7 @@
 /*   By: plbuet <plbuet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:48:01 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/28 11:05:13 by plbuet           ###   ########.fr       */
+/*   Updated: 2025/05/01 13:07:34 by plbuet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	init_data(t_data *data, char **v, int c)
 	}
 	if (data->time_to_die <= 0 || data->time_to_eat <= 0
 		|| data->time_to_sleep <= 0 || data->nb_philo <= 0
-		|| data->nb_eat <= 0)
-		return (1);
+		|| data->nb_eat <= -1)
+		return(1);
 	return (0);
 }

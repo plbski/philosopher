@@ -6,7 +6,7 @@
 /*   By: plbuet <plbuet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:36:30 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/28 10:46:11 by plbuet           ###   ########.fr       */
+/*   Updated: 2025/05/01 13:05:24 by plbuet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	init_philo(t_philo *args, pthread_mutex_t *fork, t_data *data)
 		args[i].r_fork = &fork[i];
 		args[i].l_fork = &fork[(i + 1) % data->nb_philo];
 		args[i].finish = 0;
-		if (pthread_mutex_init(&args[i].data_mutex, NULL))
+		if (pthread_mutex_init(&args[i].data_mutex, NULL) != 0)
 		{
 			while (i >= 0)
 			{
@@ -111,8 +111,9 @@ int	main(int c, char **v)
 
 	if (c < 5 || c > 6)
 		return (1);
-	if (init_data(&data, v, c))
-		return (1);
+	if (init_data(&data, v, c) != 0)
+		{printf("exit \n");
+		return (1);}
 	if ((fork = fork_init(data.nb_philo)) == NULL)
 		return (1);
 	philo = malloc(sizeof(pthread_t) * data.nb_philo + 1);
