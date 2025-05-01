@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plbuet <plbuet@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:48:01 by pbuet             #+#    #+#             */
-/*   Updated: 2025/05/01 13:07:34 by plbuet           ###   ########.fr       */
+/*   Updated: 2025/05/01 13:32:59 by pbuet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ pthread_mutex_t	*fork_init(int nb_philo)
 	while (i < nb_philo)
 	{
 		if (pthread_mutex_init(&fork[i], NULL))
-			break;
+			break ;
 		i ++;
 	}
 	if (i < nb_philo)
@@ -60,7 +60,7 @@ pthread_mutex_t	*fork_init(int nb_philo)
 			pthread_mutex_destroy(&fork[i]);
 			i --;
 		}
-		return(NULL);
+		return (NULL);
 	}
 	return (fork);
 }
@@ -77,7 +77,7 @@ void	print_mute(void *arg, char *s, int force)
 	if (stop != 1 || force == 1)
 	{
 		pthread_mutex_lock(&args->data->print_mutex);
-		printf("%ld %d %s\n", get_time() -  args->data->start, args->id, s);
+		printf("%ld %d %s\n", get_time() - args->data->start, args->id, s);
 		pthread_mutex_unlock(&args->data->print_mutex);
 	}
 }
@@ -97,16 +97,16 @@ int	init_data(t_data *data, char **v, int c)
 	if ((pthread_mutex_init(&data->stop_mutex, NULL) != 0))
 	{
 		pthread_mutex_destroy(&data->stop_mutex);
-		return(1);
+		return (1);
 	}
 	if ((pthread_mutex_init(&data->print_mutex, NULL) != 0))
 	{
 		pthread_mutex_destroy(&data->print_mutex);
-		return(1);
+		return (1);
 	}
 	if (data->time_to_die <= 0 || data->time_to_eat <= 0
 		|| data->time_to_sleep <= 0 || data->nb_philo <= 0
 		|| data->nb_eat <= -1)
-		return(1);
+		return (1);
 	return (0);
 }

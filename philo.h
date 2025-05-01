@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plbuet <plbuet@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:52:04 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/28 08:50:26 by plbuet           ###   ########.fr       */
+/*   Updated: 2025/05/01 13:33:54 by pbuet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void			freedest(t_data data, pthread_mutex_t *fork,
 					pthread_t *philo, t_philo *args);
 
 //philo_eat
-int			eat(void *arg);
-int			test(void *arg);
-void		*routine(void *arg);
+int				eat(void *arg);
+int				test(void *arg);
+void			*routine(void *arg);
 
 #endif

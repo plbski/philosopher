@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_eat.c                                        :+:      :+:    :+:   */
+/*   philo_routine.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plbuet <plbuet@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pbuet <pbuet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 11:42:08 by pbuet             #+#    #+#             */
-/*   Updated: 2025/04/28 08:49:58 by plbuet           ###   ########.fr       */
+/*   Updated: 2025/05/01 13:33:31 by pbuet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,12 +108,12 @@ void	*routine(void *arg)
 		if ((args->id % 2) != 0)
 			usleep(200);
 		if (eat(args))
-			break;
+			break ;
 		pthread_mutex_lock(&args->data->stop_mutex);
 		stop = args->data->stop_flag;
 		pthread_mutex_unlock(&args->data->stop_mutex);
 		if (stop == 1)
-			break;
+			break ;
 		print_mute(args, "is sleeping", 0);
 		usleep(args->data->time_to_sleep);
 	}
